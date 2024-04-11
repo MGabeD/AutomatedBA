@@ -10,6 +10,7 @@ class KnowledgeInjectionStep(Step):
         client,
         collection_name,
         file_path,
+        # Incorporate for feed-forward of context
         existing_context={},
         order=0,
         model="text-embedding-3-small",
