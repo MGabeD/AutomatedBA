@@ -10,6 +10,9 @@ class KnowledgeInjectionStep(Step):
         client,
         collection_name,
         file_path,
+        # Incorporate for feed-forward of context
+        existing_context={},
+        order=0,
         model="text-embedding-3-small",
         top_k=5,
         order = 0,
@@ -29,14 +32,16 @@ class KnowledgeInjectionStep(Step):
             raise ValueError("Prompt not provided in arguments")
         base_prompt = args["prompt"]
         similar_doc_ids = self.retrieve_similar_documents(base_prompt)
+        # TO DO: Make this a set
         knowledge_texts = [
             self.fetch_document_text_by_line_number(line_num)
             for line_num in similar_doc_ids
         ]
-        return [base_prompt, knowledge_texts]
+        # Return as singleton
+        return {base_prompt: base_prompt, knowledge_texts: knowledge_texts}
 
     def getRequirements(self):
-        return [self.file_path]
+        return None
 
     def retrieve_similar_documents(self, query_text):
         query_vector = (
